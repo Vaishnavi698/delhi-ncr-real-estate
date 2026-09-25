@@ -1,588 +1,229 @@
-# 🏙️ Delhi-NCR Real Estate Market & Price Fairness Analyzer
+# Delhi-NCR Real Estate Market & Price Fairness Analyzer
 
-> **An end-to-end data analytics project that turns raw Delhi-NCR
-> property listings into actionable market insights using Python, DuckDB
-> SQL, Pandas, Plotly, and Streamlit.**
+### Live Dashboard: https://vaishnavi698-delhi-ncr-real-estate-app-6cwu4s.streamlit.app/
+No installation needed - open the link and explore the dashboard directly in your browser.
 
-```{=html}
-<p align="center">
-```
-`<a href="https://vaishnavi698-delhi-ncr-real-estate-app-6cwu4s.streamlit.app/">`{=html}
-`<strong>`{=html}🚀 OPEN LIVE STREAMLIT DASHBOARD`</strong>`{=html}
-`</a>`{=html}
-```{=html}
-</p>
-```
-```{=html}
-<p align="center">
-```
-`<img src="screenshots/dashboard_overview.png.png" alt="Delhi-NCR Real Estate Dashboard Overview" width="900">`{=html}
-```{=html}
-</p>
-```
+![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)
+![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
+![DuckDB](https://img.shields.io/badge/DuckDB-SQL%20Engine-yellow.svg)
+![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-red.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
 
-------------------------------------------------------------------------
+---
 
-## 🎯 What This Project Does
+## Overview
 
-The Delhi-NCR real estate market is highly fragmented. Property prices
-can vary significantly by **locality, BHK configuration, area, and
-region**, making it difficult to judge a listing from its asking price
-alone.
+The real estate market across Delhi, Gurgaon, Noida, Greater Noida, Ghaziabad, and Faridabad is highly fragmented. Listing prices vary widely across localities, BHK configurations, and square footage, making it difficult for renters, buyers, and analysts to know whether a listed price actually reflects fair market value.
 
-This project builds an interactive analytics application that:
+This project is an end-to-end data analytics application that ingests 3,772 real property listings, standardizes pricing metrics, uses DuckDB SQL to compute localized baseline medians (price per sq.ft per BHK type), and automatically flags listings that deviate by more than 20% from the local market median.
 
--   📍 compares prices across localities
--   🏠 analyzes BHK-wise pricing patterns
--   📐 evaluates price per square foot
--   💰 surfaces comparatively affordable listings
--   🚩 flags listings that deviate significantly from their benchmark
--   🌆 compares regional price trends
--   💻 uses DuckDB SQL for analytical transformations
--   📊 presents the results through an interactive Streamlit dashboard
 
-### 🔗 Live Application
+---
 
-**[👉 Launch the Interactive Streamlit
-Dashboard](https://vaishnavi698-delhi-ncr-real-estate-app-6cwu4s.streamlit.app/)**
+## Features
 
-The live application lets you interact with filters, charts, benchmark
-analysis, flagged listings, and drilldown tables.
+- **Locality Deep-Dive** - Pick a locality (e.g. Dwarka, Gurugram, Saket) and instantly see average price, price per sq.ft, and BHK-wise breakdown
+- **Flagged Property Inspector** - A table of listings tagged as Overpriced, Underpriced, or Fair Market Price
+- **Cheapest Options Finder** - Surfaces the most affordable available listings per locality
+- **BHK Price Breakdown** - Box plots and bar charts showing price variance across 1BHK/2BHK/3BHK/etc.
+- **Regional Price Trends** - Explore price patterns across Delhi-NCR sub-regions
+- **Live SQL Query Console** - See the real DuckDB SQL queries powering the dashboard, embedded in-app
+- **Interactive Filters** - Filter by region, locality, BHK type, and price range in real time
 
-------------------------------------------------------------------------
+---
 
-## 📌 Problem Statement
+## Screenshots
 
-A property listing's price is difficult to evaluate without comparable
-market context.
+**Dashboard Overview**
 
-### Key Challenges
+![Dashboard Overview](screenshots/dashboard_overview.png.png)
 
-  -----------------------------------------------------------------------
-  Challenge                           Why it matters
-  ----------------------------------- -----------------------------------
-  💸 Price mismatch                   Asking prices may differ
-                                      substantially from comparable
-                                      listings
+**Locality Deep-Dive**
 
-  📍 Locality variation               Different micro-markets can have
-                                      very different price levels
+![Locality Deep Dive](screenshots/01_locality_deep_dive.png)
 
-  🏠 BHK differences                  Different configurations require
-                                      relevant comparison groups
+**BHK Price Breakdown**
 
-  📊 Unstructured data                Raw listings can contain missing
-                                      and inconsistent values
+![BHK Price Breakdown](screenshots/02_bhk_price_breakdown.png)
 
-  📈 Wide price range                 Budget and luxury properties create
-                                      difficult visual comparisons
-  -----------------------------------------------------------------------
+**Cheapest Options & Flagged Listings**
 
-### 💡 Approach
+![Cheapest Options and Flagged](screenshots/03_cheapest_options_and_flagged.png)
 
-The application standardizes raw listing data, creates **Locality + BHK
-benchmarks**, calculates derived metrics, and classifies listings based
-on deviation from the relevant benchmark.
+**Regional Price Trends**
 
--   🔴 **Overpriced (\>20%)**
--   🟢 **Underpriced (\>20%)**
--   🟡 **Fair Market Price**
+![Regional Price Trends](screenshots/04_regional_price_trends.png)
 
-> **Note:** These are analytical classifications based on the project's
-> benchmark methodology, not professional property valuations.
+**Regional Price Trends - Affordable Segment**
 
-------------------------------------------------------------------------
+![Regional Price Trends Affordable](screenshots/05_regional_price_trends_affordable.png)
 
-## 🔄 Data Analytics Pipeline
+**Live DuckDB SQL Queries**
 
-```{=html}
-<table>
+![DuckDB SQL Queries](screenshots/05_duckdb_sql_queries..png)
+
+**Drilldown Table**
+
+![Drilldown Table](screenshots/drilldown_table.png.png)
+
+---
+
+## Project Structure
+
 ```
-```{=html}
-<tr>
-```
-```{=html}
-<td align="center">
-```
-`<strong>`{=html}1️⃣ Raw Listings`</strong>`{=html}`<br>`{=html}Property
-Data
-```{=html}
-</td>
-```
-```{=html}
-<td align="center">
-```
-→
-```{=html}
-</td>
-```
-```{=html}
-<td align="center">
-```
-`<strong>`{=html}2️⃣ Data
-Cleaning`</strong>`{=html}`<br>`{=html}Standardization
-```{=html}
-</td>
-```
-```{=html}
-<td align="center">
-```
-→
-```{=html}
-</td>
-```
-```{=html}
-<td align="center">
-```
-`<strong>`{=html}3️⃣ Feature
-Engineering`</strong>`{=html}`<br>`{=html}Derived Metrics
-```{=html}
-</td>
-```
-```{=html}
-</tr>
-```
-```{=html}
-<tr>
-```
-```{=html}
-<td align="center">
-```
-`<strong>`{=html}4️⃣ DuckDB
-SQL`</strong>`{=html}`<br>`{=html}Aggregations
-```{=html}
-</td>
-```
-```{=html}
-<td align="center">
-```
-→
-```{=html}
-</td>
-```
-```{=html}
-<td align="center">
-```
-`<strong>`{=html}5️⃣ Benchmarks`</strong>`{=html}`<br>`{=html}Locality +
-BHK
-```{=html}
-</td>
-```
-```{=html}
-<td align="center">
-```
-→
-```{=html}
-</td>
-```
-```{=html}
-<td align="center">
-```
-`<strong>`{=html}6️⃣ Price
-Analysis`</strong>`{=html}`<br>`{=html}Deviation Flags
-```{=html}
-</td>
-```
-```{=html}
-</tr>
-```
-```{=html}
-<tr>
-```
-```{=html}
-<td align="center">
-```
-`<strong>`{=html}7️⃣ Streamlit`</strong>`{=html}`<br>`{=html}Interactive
-Dashboard
-```{=html}
-</td>
-```
-```{=html}
-<td align="center">
-```
-→
-```{=html}
-</td>
-```
-```{=html}
-<td align="center">
-```
-`<strong>`{=html}8️⃣ Insights`</strong>`{=html}`<br>`{=html}Market
-Analysis
-```{=html}
-</td>
-```
-```{=html}
-<td>
-```
-```{=html}
-</td>
-```
-```{=html}
-<td>
-```
-```{=html}
-</td>
-```
-```{=html}
-</tr>
-```
-```{=html}
-</table>
+delhi-ncr-real-estate/
+  .vscode/                        Editor configurations
+  data/                           Datasets folder
+    MagicBricks.csv               Raw scraped property listings (3,772 rows, from Kaggle)
+    cleaned_delhi_real_esta.csv   Processed and standardized dataset
+  screenshots/                    App preview screenshots
+  venv/                           Virtual environment (ignored by Git)
+  .gitignore                      Files excluded from Git tracking
+  app.py                          Main Streamlit web application
+  data_cleaning.py                Data processing and standardization script
+  queries.sql                     Standalone DuckDB SQL benchmarking queries
+  README.md                       This file
+  requirements.txt                Python dependencies
 ```
 
-------------------------------------------------------------------------
+---
 
-## 🛠️ Data Cleaning & Processing
+## Data Cleaning & Feature Engineering
 
-The raw property dataset is processed before analytical queries and
-visualization.
+**Source:** Housing Price Dataset of Delhi, India - Kaggle
+https://www.kaggle.com/datasets/goelyash/housing-price-dataset-of-delhiindia (3,772 raw records)
 
-### 1. Data Ingestion
+Key steps performed in `data_cleaning.py`:
 
-Property records cover major Delhi-NCR markets:
+- **Currency Standardization** - Normalized raw listing prices into a unified Rupee format (Lakhs/Crores converted consistently)
+- **Missing Value Handling** - Blank/missing furnishing statuses filled with "Not Specified" instead of leaving raw NaN strings visible on dashboard cards
+- **Derived Metrics** - Computed locality-level median rates and BHK-wise medians
+- **Price Fairness Tagging** - Every listing is classified dynamically:
 
-**Delhi • Gurgaon • Noida • Greater Noida • Ghaziabad • Faridabad**
+| Condition | Tag |
+|---|---|
+| Listed price > 1.20 x Locality-BHK Median | Overpriced (>20%) |
+| Listed price < 0.80 x Locality-BHK Median | Underpriced (>20%) |
+| Within 20% of median | Fair Market Price |
 
-### 2. Price Standardization
+---
 
-Prices are converted into numerical values and presented in readable
-Indian formats:
+## DuckDB SQL - Core Queries
 
-**₹ Lakhs • ₹ Crores**
+DuckDB runs entirely in-memory, enabling fast OLAP-style aggregation directly on the cleaned dataset.
 
-### 3. Missing Value Handling
-
-Missing furnishing values are cleaned and displayed as:
-
-`Not Specified`
-
-### 4. Derived Metrics
-
-The pipeline generates:
-
--   `Price_per_SqFt`
--   `Avg_Price`
--   Locality-level benchmarks
--   BHK-level benchmarks
--   `Price_Tag`
-
-------------------------------------------------------------------------
-
-## 📍 1. Locality Deep-Dive
-
-The locality analysis provides a detailed view of property pricing
-across Delhi-NCR micro-markets.
-
-```{=html}
-<p align="center">
-```
-`<img src="screenshots/01_locality_deep_dive.png" alt="Locality Deep Dive" width="900">`{=html}
-```{=html}
-</p>
-```
-**Focus:** locality, property area, listed price, price per sq.ft, and
-comparable market context.
-
-------------------------------------------------------------------------
-
-## 🏠 2. BHK Price Breakdown
-
-Pricing patterns can differ substantially by property configuration.
-
-```{=html}
-<p align="center">
-```
-`<img src="screenshots/02_bhk_price_breakdown.png" alt="BHK Price Breakdown" width="900">`{=html}
-```{=html}
-</p>
-```
-The analysis compares BHK configuration, average property price,
-property size, price per sq.ft, and listing volume.
-
-------------------------------------------------------------------------
-
-## 💰 3. Affordable Options & Flagged Listings
-
-This section combines comparatively affordable listings with properties
-that show significant deviation from their benchmark.
-
-```{=html}
-<p align="center">
-```
-`<img src="screenshots/03_cheapest_options_and_flagged.png" alt="Affordable Options and Flagged Listings" width="900">`{=html}
-```{=html}
-</p>
-```
-  Classification         Rule
-  ---------------------- -----------------------------------
-  🔴 Overpriced          Listed price \> 120% of benchmark
-  🟢 Underpriced         Listed price \< 80% of benchmark
-  🟡 Fair Market Price   Within ±20% of benchmark
-
-------------------------------------------------------------------------
-
-## 🌆 4. Regional Price Trends
-
-The dashboard compares observed property pricing across Delhi-NCR
-regions.
-
-```{=html}
-<p align="center">
-```
-`<img src="screenshots/04_regional_price_trends.png" alt="Regional Price Trends" width="900">`{=html}
-```{=html}
-</p>
-```
-This provides a regional view of pricing variation across major
-Delhi-NCR markets.
-
-------------------------------------------------------------------------
-
-## 💻 5. DuckDB SQL Analytics Engine
-
-DuckDB is used as the analytical SQL engine for aggregation,
-benchmarking, and price-deviation analysis.
-
-```{=html}
-<p align="center">
-```
-`<img src="screenshots/05_duckdb_sql_queries.png" alt="DuckDB SQL Queries" width="900">`{=html}
-```{=html}
-</p>
-```
-### Locality & BHK Pricing Benchmarks
-
-``` sql
+**1. Locality & BHK Price Benchmarking**
+```sql
 SELECT 
     Locality,
     BHK,
     ROUND(AVG(Price), 2) AS Avg_Price,
     ROUND(AVG(Price_per_SqFt), 2) AS Avg_Price_Per_SqFt,
-    COUNT(*) AS Listing_Count
+    COUNT(*) AS Total_Listings
 FROM listings
 GROUP BY Locality, BHK
 HAVING COUNT(*) >= 2
 ORDER BY Avg_Price DESC;
 ```
 
-### 🚩 Price Deviation Detection
-
-``` sql
+**2. Identifying Price Mismatches (>20% Deviation)**
+```sql
 SELECT 
     l.Locality,
     l.BHK,
     l.Area,
     l.Price AS Listed_Price,
     b.Avg_Price AS Locality_Avg_Price,
+    ROUND((l.Price / b.Avg_Price) * 100, 1) AS Price_To_Avg_Percentage,
     CASE 
-        WHEN l.Price > (b.Avg_Price * 1.20) 
-            THEN 'Overpriced (>20%)'
-        WHEN l.Price < (b.Avg_Price * 0.80) 
-            THEN 'Underpriced (>20%)'
+        WHEN l.Price > (b.Avg_Price * 1.20) THEN 'Overpriced (>20%)'
+        WHEN l.Price < (b.Avg_Price * 0.80) THEN 'Underpriced (>20%)'
         ELSE 'Fair Market Price'
     END AS Price_Tag
 FROM listings l
 JOIN locality_benchmarks b 
-    ON l.Locality = b.Locality
-    AND l.BHK = b.BHK;
+  ON l.Locality = b.Locality AND l.BHK = b.BHK;
 ```
 
-------------------------------------------------------------------------
+Full query set is in `queries.sql`.
 
-## 💡 6. Affordable Regional Markets
+---
 
-A dedicated view highlights comparatively affordable regional price
-trends.
+## Tech Stack
 
-```{=html}
-<p align="center">
-```
-`<img src="screenshots/05_regional_price_trends_affordable.png" alt="Affordable Regional Price Trends" width="900">`{=html}
-```{=html}
-</p>
-```
+| Layer | Tool |
+|---|---|
+| Language | Python 3.10+ |
+| Data Cleaning | Pandas, NumPy |
+| Analytics Engine | DuckDB (in-memory SQL) |
+| Visualization | Plotly Express |
+| Dashboard Framework | Streamlit |
+| Deployment | Streamlit Community Cloud |
+| Version Control | Git & GitHub |
 
-------------------------------------------------------------------------
+---
 
-## 📋 7. Benchmark Drilldown
+## Run It Locally
 
-The drilldown table exposes the underlying benchmark and listing-level
-results behind the visualizations.
-
-```{=html}
-<p align="center">
-```
-`<img src="screenshots/drilldown_table.png.png" alt="Benchmark Drilldown Table" width="900">`{=html}
-```{=html}
-</p>
-```
-
-------------------------------------------------------------------------
-
-## ⚠️ Challenges Faced & Solutions
-
-### 1. Missing Values
-
-**Problem:** Missing furnishing values could appear as raw `NaN` values.
-
-**Solution:** Explicitly handled missing values and displayed them as
-`Not Specified`.
-
-``` python
-df["Furnishing"] = df["Furnishing"].fillna("Not Specified")
-```
-
-### 2. Large Price Range
-
-**Problem:** The dataset spans a wide price range.
-
-**Solution:** Prices are formatted dynamically using **₹ Lakhs** and **₹
-Crores**, with appropriate chart scaling where required.
-
-### 3. Locality-Level Comparability
-
-**Problem:** A single overall market average can hide major differences
-between localities.
-
-**Solution:** Benchmarks are calculated at the **Locality + BHK** level.
-
-------------------------------------------------------------------------
-
-## 📈 Key Analytical Questions
-
--   Which localities have higher or lower observed property prices?
--   How does pricing vary across BHK configurations?
--   What is the average price per sq.ft across localities?
--   Which listings deviate significantly from their locality/BHK
-    benchmark?
--   Which regions contain comparatively affordable options?
--   How does property area relate to listing price?
--   How can SQL-based benchmarking provide additional context around
-    asking prices?
-
-------------------------------------------------------------------------
-
-## 🧰 Tech Stack
-
-  Technology                         Purpose
-  ---------------------------------- -----------------------------------
-  🐍 **Python 3.10+**                Core programming language
-  🦆 **DuckDB**                      Analytical SQL / OLAP engine
-  🐼 **Pandas**                      Data cleaning & manipulation
-  🔢 **NumPy**                       Numerical operations
-  📊 **Plotly Express**              Interactive visualizations
-  🎈 **Streamlit**                   Interactive web application
-  🌐 **GitHub**                      Version control & project hosting
-  ☁️ **Streamlit Community Cloud**   Deployment
-
-------------------------------------------------------------------------
-
-## 📁 Project Structure
-
-``` text
-delhi-ncr-real-estate/
-│
-├── app.py
-├── data_cleaning.py
-├── queries.sql
-├── requirements.txt
-├── README.md
-│
-├── data/
-│   └── ...
-│
-└── screenshots/
-    ├── 01_locality_deep_dive.png
-    ├── 02_bhk_price_breakdown.png
-    ├── 03_cheapest_options_and_flagged.png
-    ├── 04_regional_price_trends.png
-    ├── 05_duckdb_sql_queries.png
-    ├── 05_regional_price_trends_affordable.png
-    ├── dashboard_overview.png.png
-    └── drilldown_table.png.png
-```
-
-------------------------------------------------------------------------
-
-## 🚀 Run Locally
-
-### 1. Clone the repository
-
-``` bash
+```bash
+# 1. Clone the repository
 git clone https://github.com/Vaishnavi698/delhi-ncr-real-estate.git
-```
-
-### 2. Navigate to the project
-
-``` bash
 cd delhi-ncr-real-estate
-```
 
-### 3. Install dependencies
+# 2. Create and activate a virtual environment
+python -m venv venv
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # macOS/Linux
 
-``` bash
+# 3. Install dependencies
 pip install -r requirements.txt
-```
 
-### 4. Launch the Streamlit dashboard
-
-``` bash
+# 4. Run the Streamlit app
 streamlit run app.py
 ```
 
-------------------------------------------------------------------------
+The app will open automatically at http://localhost:8501
 
-## 🚀 Try the Live Application
-
-```{=html}
-<p align="center">
+**Dependencies (requirements.txt)**
 ```
-`<a href="https://vaishnavi698-delhi-ncr-real-estate-app-6cwu4s.streamlit.app/">`{=html}
-`<strong>`{=html}🔴 LAUNCH LIVE STREAMLIT DASHBOARD →`</strong>`{=html}
-`</a>`{=html}
-```{=html}
-</p>
+streamlit
+pandas
+duckdb
+plotly
+numpy
 ```
 
-------------------------------------------------------------------------
+---
 
-## ⭐ Project Highlights
+## Deployment
 
-  -----------------------------------------------------------------------
-  Area                                Highlights
-  ----------------------------------- -----------------------------------
-  📊 **Data Analytics**               Cleaning, transformation, feature
-                                      engineering, price analysis
+| | |
+|---|---|
+| Platform | Streamlit Community Cloud |
+| GitHub Repo | https://github.com/Vaishnavi698/delhi-ncr-real-estate |
+| Live App | https://vaishnavi698-delhi-ncr-real-estate-app-6cwu4s.streamlit.app/ |
 
-  💻 **SQL**                          DuckDB, aggregations, benchmarks,
-                                      joins, CASE logic
+---
 
-  📈 **Visualization**                Plotly charts, regional trends, BHK
-                                      analysis
 
-  🚩 **Price Analysis**               Locality + BHK benchmark deviation
 
-  🎈 **Application**                  Interactive Streamlit dashboard
+## Future Improvements
 
-  🚀 **Deployment**                   Live Streamlit Community Cloud
-                                      application
-  -----------------------------------------------------------------------
+- Add a live map view (locality-wise price heatmap) using Folium/Mapbox
+- Add historical price trend tracking if time-series data becomes available
+- Deploy an API endpoint for programmatic fairness-score lookups
+- Expand dataset coverage beyond current listings
 
-------------------------------------------------------------------------
+---
 
-## 👩‍💻 Author
+## Author
 
-### Vaishnavi Gupta
+**Vaishnavi**
+GitHub: https://github.com/Vaishnavi698
+Live App: https://vaishnavi698-delhi-ncr-real-estate-app-6cwu4s.streamlit.app/
 
-**Computer Science Graduate \| Data Analytics \| Python \| SQL \| DuckDB
-\| Power BI \| Streamlit**
+---
 
-```{=html}
-<p align="center">
-```
-`<strong>`{=html}🏙️ Turning property listings into structured,
-benchmark-driven insights.`</strong>`{=html}
-```{=html}
-</p>
-```
+## License
+
+This project is licensed under the MIT License.
